@@ -9,4 +9,4 @@ import { UsersSchema } from 'src/entities/users.schema';
   providers: [UsersService],
   controllers: [UsersController],
 })
-export class UsersModule {}
+export class UsersModule { }

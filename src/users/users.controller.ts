@@ -5,25 +5,31 @@ import { UpdateItemDto } from './dto/update-item.dto';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @Get()
-  getAllUsers() {
+  async getAllUsers() {
+
     return this.usersService.findAll();
   }
 
-  @Post()
+  @Post()//add data
   createUser(@Body() createUserDto: createUserDto) {
     return this.usersService.create(createUserDto);
   }
- 
-  @Delete(':id')
+
+  @Delete(':id') //delete Data
   async deleteUser(@Param('id') id: string): Promise<void> {
     await this.usersService.deleteUser(id);
   }
-  @Put(':id')
+  @Put(':id')//update data 
   async updateUser(@Param('id') id: string, @Body() updateItemDto: UpdateItemDto) {
     return this.usersService.updateUser(id, updateItemDto);
   }
-  
+  //get data by id 
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    return this.usersService.findOneById(id);
+  }
+
 }
