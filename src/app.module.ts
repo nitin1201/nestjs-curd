@@ -7,6 +7,7 @@ import { UsersModule } from './users/users.module';
 
 // import { bookcontroller } from './app.controller';
 import { AuthModule } from './auth/auth.module';
+import { OtpModule } from './otp/otp.module';
 @Module({
   imports: [ConfigModule.forRoot({
     isGlobal: true,
@@ -19,7 +20,8 @@ import { AuthModule } from './auth/auth.module';
   }),
   MongooseModule.forFeature([{  name: 'Users', schema: UsersSchema }]),
   UsersModule,
-  AuthModule 
+  AuthModule,
+  OtpModule 
   ],
   controllers: [],
   providers: [],
