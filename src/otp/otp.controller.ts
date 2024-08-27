@@ -9,15 +9,16 @@ export class OtpController {
   async generateOtp(@Body() body: { userId: string }) {
     const { userId } = body;
     const otp = await this.otpService.generateOtp(userId);
-    return { otp };
+    const message="opt generated successfully"
+    return { message };
   }
 
-  @Post('verify')
-  async verifyOtp(@Body() body: { userId: string; otp: string }) {
-    const { userId, otp } = body;
-    const isValid = await this.otpService.verifyOtp(userId, otp);
-    return { isValid };
-  }
+  // @Post('verify')
+  // async verifyOtp(@Body() body: { userId: string; otp: string }) {
+  //   const { userId, otp } = body;
+  //   const isValid = await this.otpService.verifyOtp(userId, otp);
+  //   return { isValid };
+  // }
 
   @Get('latest/:userId')
   async getOtpByUserId(@Param('userId') userId: string) {

@@ -6,7 +6,7 @@ import { OtpController } from './otp.controller';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: 'Otp', schema: OtpSchema }]),
+    MongooseModule.forFeature([{ name: 'Otp', schema: OtpSchema }]), // Use string 'Otp' here
   ],
   providers: [OtpService],
   controllers: [OtpController],

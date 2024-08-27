@@ -35,7 +35,7 @@ export class OtpService {
     const otpRecord = await this.otpModel.findOne({ userId });
 
     if (!otpRecord || otpRecord.expiresAt < new Date()) {
-      throw new NotFoundException('OTP not found or expired.');
+      throw new NotFoundException('OTP expired.');
     }
 
     const isValid = speakeasy.totp.verify({
