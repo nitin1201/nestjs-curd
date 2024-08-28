@@ -11,7 +11,7 @@ export class Users {
     @Transform(({ value }) => value.toString())
     _id: string;
 
-    @Prop()
+    @Prop({ required: true, unique: true })
     email: string;
 
     @Prop()
@@ -20,19 +20,14 @@ export class Users {
     @Prop()
     lastname: string;
 
-    /* need to remove start*/
-    @Prop()
-    username: string;
-    /* remove end*/
+    @Prop({ required: true })
+    password: string; // Add this field for storing hashed passwords
 
     @Prop()
     createdDate: Date;
 
     @Prop()
     modifiedDate: Date;
-
-
 }
 
 export const UsersSchema = SchemaFactory.createForClass(Users);
-

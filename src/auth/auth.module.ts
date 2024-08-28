@@ -4,10 +4,12 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtStrategy } from './jwt.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Users, UsersSchema } from 'src/entities/users.schema';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(), // Ensure environment variables are loaded
+    ConfigModule.forRoot(), // Load environment variables
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -16,6 +18,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         signOptions: { expiresIn: '1h' },
       }),
     }),
+    MongooseModule.forFeature([{ name: Users.name, schema: UsersSchema }]), // Register Users schema
   ],
   providers: [AuthService, JwtStrategy],
   controllers: [AuthController],

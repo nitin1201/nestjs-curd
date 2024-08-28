@@ -3,13 +3,13 @@ import { OtpService } from './otp.service';
 
 @Controller('otp')
 export class OtpController {
-  constructor(private readonly otpService: OtpService) {}
+  constructor(private readonly otpService: OtpService) { }
 
   @Post('generate')
   async generateOtp(@Body() body: { userId: string }) {
     const { userId } = body;
     const otp = await this.otpService.generateOtp(userId);
-    const message="opt generated successfully"
+    const message = "opt generated successfully"
     return { message };
   }
 
