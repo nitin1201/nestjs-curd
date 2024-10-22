@@ -1,38 +1,66 @@
+// import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+// import { Transform } from 'class-transformer';
+
+// @Schema({
+//   toJSON: {
+//     getters: true,
+//     virtuals: true,
+//   },
+// })
+// export class Users {
+//   @Transform(({ value }) => value.toString())
+//   _id: string;
+
+//   @Prop()
+//   email: string;
+
+//   @Prop()
+//   firstname: string;
+
+//   @Prop()
+//   lastname: string;
+
+//   @Prop()
+//   username: string;
+
+//   @Prop()
+//   createdDate: Date;
+
+//   @Prop()
+//   modifiedDate: Date;
+// }
+// export const UsersSchema = SchemaFactory.createForClass(Users);
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Transform } from 'class-transformer';
+import { Document } from 'mongoose';
 
-@Schema({
-    toJSON: {
-        getters: true,
-        virtuals: true,
+@Schema()
+export class Users extends Document {
+  @Prop({
+    required: true,
+    unique: true,
+    validate: {
+      validator: (v: string) => v.length > 0,
+      message: 'Username cannot be empty',
     },
-})
-export class Users {
-    @Transform(({ value }) => value.toString())
-    _id: string;
+  })
+  username: string;
 
-    @Prop()
-    email: string;
-
-    @Prop()
-    firstname: string;
-
-    @Prop()
-    lastname: string;
-
-    /* need to remove start*/
-    @Prop()
-    username: string;
-    /* remove end*/
-
-    @Prop()
-    createdDate: Date;
-
-    @Prop()
-    modifiedDate: Date;
-
-
+  @Prop({
+    required: true,
+    unique: true,
+    validate: {
+      validator: (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),
+      message: 'Email is not valid',
+    },
+  })
+  email: string;
+  @Prop({
+    required: true,
+    validate: {
+      validator: (v: string) => v.length > 0,
+      message: 'Password cannot be empty',
+    },
+  })
+  password: string;
 }
-
 export const UsersSchema = SchemaFactory.createForClass(Users);
-

@@ -1,35 +1,85 @@
-import { Controller, Get, Post, Body, Param, ParseIntPipe, Delete, Put } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Put,
+  UsePipes,
+  ValidationPipe,
+  HttpCode,
+  HttpException,
+  HttpStatus,
+  Query,
+} from '@nestjs/common';
+
 import { UsersService } from './users.service';
 import { createUserDto } from './dto/create.UserDto';
 import { UpdateItemDto } from './dto/update-item.dto';
+import { Users } from 'src/entities/users.schema';
+import { SignUpDto } from './dto/sign-up.dto';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
 
-  @Get()
-  async getAllUsers() {
-
-    return this.usersService.findAll();
+  //getAll Data from Database *+pagination------ http://localhost:4100/users/getAll?page=1&limit=2
+  @Get('getAll')
+  async getAllUsers(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 6,
+  ) {
+    return this.usersService.findAll(page, limit);
   }
-
-  @Post()//add data
+  
+  //add data *----------localhost:4100/users/postData
+  @Post('postData')
   createUser(@Body() createUserDto: createUserDto) {
     return this.usersService.create(createUserDto);
   }
 
-  @Delete(':id') //delete Data
+  //delete Data *----------localhost:4100/users/delete/66cffdaebb898c0061b4672d
+  @Delete('delete/:id')
   async deleteUser(@Param('id') id: string): Promise<void> {
     await this.usersService.deleteUser(id);
   }
-  @Put(':id')//update data 
-  async updateUser(@Param('id') id: string, @Body() updateItemDto: UpdateItemDto) {
+
+  //update data  *----------localhost:4100/users/update/67160d66892a638f3df27019
+  @Put('update/:id')
+  async updateUser(
+    @Param('id') id: string,
+    @Body() updateItemDto: UpdateItemDto,
+  ) {
     return this.usersService.updateUser(id, updateItemDto);
   }
-  //get data by id 
+
+  //get data by id  *----------localhost:4100/users/67160d22892a638f3df27010
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return this.usersService.findOneById(id);
   }
 
+  //sign-up  *----------localhost:4100/users/signup
+  @Post('signup')
+  @UsePipes(new ValidationPipe())
+  async signUp(
+    @Body() signUpDto: SignUpDto,
+  ): Promise<{ user: Users; token: string }> {
+    return this.usersService.signUp(signUpDto);
+  }
+
+  //delete multipalUsersData at a single  *----------localhost:4100/users/delete-many
+  @Delete('delete-many')
+  @HttpCode(200)
+  async deleteMany(@Body('ids') ids: string[]) {
+    const result = await this.usersService.remove(ids);
+    return { message: 'successfully deleted', result };
+  }
+
+  //Bulk insert in Database  *---------http://localhost:4100/users/bulk-insert
+  @Post('bulk-insert')
+  async bulkInsert(@Body() user: Users[]) {
+    return this.usersService.bulkInsert(user);
+  }
 }
