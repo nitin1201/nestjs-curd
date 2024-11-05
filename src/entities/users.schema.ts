@@ -1,66 +1,34 @@
-// import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-// import { Transform } from 'class-transformer';
-
-// @Schema({
-//   toJSON: {
-//     getters: true,
-//     virtuals: true,
-//   },
-// })
-// export class Users {
-//   @Transform(({ value }) => value.toString())
-//   _id: string;
-
-//   @Prop()
-//   email: string;
-
-//   @Prop()
-//   firstname: string;
-
-//   @Prop()
-//   lastname: string;
-
-//   @Prop()
-//   username: string;
-
-//   @Prop()
-//   createdDate: Date;
-
-//   @Prop()
-//   modifiedDate: Date;
-// }
-// export const UsersSchema = SchemaFactory.createForClass(Users);
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Transform } from 'class-transformer';
+import { UserRole } from 'src/users/dto/sign-up.dto';
 
-@Schema()
-export class Users extends Document {
-  @Prop({
-    required: true,
-    unique: true,
-    validate: {
-      validator: (v: string) => v.length > 0,
-      message: 'Username cannot be empty',
-    },
-  })
+@Schema({
+  toJSON: {
+    getters: true,
+    virtuals: true,
+  },
+})
+export class Users {
+  @Transform(({ value }) => value.toString())
+  _id: string;
+
+  @Prop({ required: true })
+  email: string;
+
+  @Prop({ required: true })
+  firstname: string;
+
+  @Prop({ required: true })
+  lastname: string;
+
+  @Prop({ required: true })
   username: string;
 
-  @Prop({
-    required: true,
-    unique: true,
-    validate: {
-      validator: (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),
-      message: 'Email is not valid',
-    },
-  })
-  email: string;
-  @Prop({
-    required: true,
-    validate: {
-      validator: (v: string) => v.length > 0,
-      message: 'Password cannot be empty',
-    },
-  })
+  @Prop({ required: true })
   password: string;
+
+  @Prop({ required: true, enum: UserRole })
+  role: UserRole;
 }
+
 export const UsersSchema = SchemaFactory.createForClass(Users);
